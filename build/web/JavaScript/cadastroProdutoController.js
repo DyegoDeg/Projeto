@@ -18,13 +18,10 @@ app.controller('cadastroProdutoController', function($resource, $scope, $filter,
     };
     
     $scope.processaFormProduto = function(i){
-        //i.vlAltura = i.vlAltura.replace(',','.');
-        //i.vlLargura = i.vlAltura.replace(',','.');
-        //i.vlProfundidade = i.vlAltura.replace(',','.');
         $scope.produto = i;
         $scope.showCadastro = false;
         if($scope.produto.id===0){
-            var promise = $scope.getProdutoCodigo($scope.produto.cdProduto);
+            var promise = $scope.checkDuplidade($scope.produto.cdProduto);
             promise.then(function(data){
                 if(data.cdProduto === 0){
                     $scope.saveProduto();
@@ -56,7 +53,7 @@ app.controller('cadastroProdutoController', function($resource, $scope, $filter,
         $scope.showCadastro = true;
     };
     
-    $scope.getProdutoCodigo = function(id){
+    $scope.checkDuplidade = function(id){
         return $q(function (resolve, reject) {
             $http.get('http://' + window.location.hostname + ':' + window.location.port  + '/Projeto/rest/produto/codigo/'+id)
                 .success(function(data){
