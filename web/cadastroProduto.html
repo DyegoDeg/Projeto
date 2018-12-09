@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app="app">
+    <head>
+        <title>Cadastro de Produto</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="CSS/lib/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css">
+        
+        <link rel="stylesheet" href="CSS/lib/loading-bar.min.css">
+        <link rel="stylesheet" href="JavaScript/lib/jquery/jquery.gritter.css">
+        
+        <link rel="stylesheet" href="CSS/estilo.css">
+        
+    </head>
+    <body>
+        
+        <nav class="navbar navbar-default">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="principal.html">
+                Produto
+              </a>
+            </div>
+          </div>
+        </nav>
+        
+        <div ng-controller="cadastroProdutoController" >
+            
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="well well-sm">
+                            <button 
+                                    type="button" 
+                                    class="btn btn-primary" 
+                                    ng-click="abreCadastroProduto()"
+                            >
+                                Novo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- form cadastro -->
+            <div class="container" ng-show="showCadastro">
+                <form name="MyForm" ng-submit="processaFormProduto(produto)">
+                    
+                    <div class="row mbottom">
+                        <div class="col-xs-3 text-right">
+                            Código
+                        </div>
+                        <div class="col-xs-9">
+                            <input 
+                                   type="number" 
+                                   class="form-control"
+                                   style="width:15%"
+                                   ng-model="produto.cdProduto" 
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mbottom">
+                        <div class="col-xs-3 text-right">
+                            Descrição:
+                        </div>
+                        <div class="col-xs-9">
+                            <input 
+                                   type="text" 
+                                   class="form-control" 
+                                   ng-model="produto.dsProduto" 
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mbottom">
+                        <div class="col-xs-3 text-right">
+                            Altura:
+                        </div>
+                        <div class="col-xs-9">
+                            <input 
+                                type="number"
+                                   class="form-control" 
+                                   style="width:15%"
+                                   ng-model="produto.vlAltura"
+                                   step="0.01"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mbottom">
+                        <div class="col-xs-3 text-right">
+                            Largura:
+                        </div>
+                        <div class="col-xs-9">
+                            <input 
+                                   style="width:15%"
+                                   type="number" 
+                                   class="form-control" 
+                                   ng-model="produto.vlLargura" 
+                                   step="0.01"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="row mbottom">
+                        <div class="col-xs-3 text-right">
+                            Profundidade:
+                        </div>
+                        <div class="col-xs-9">
+                            <input 
+                                   type="number" 
+                                   class="form-control" 
+                                   style="width:15%"
+                                   ng-model="produto.vlProfundidade" 
+                                   step="0.01"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mbottom">
+                        <div class="col-xs-9 col-xs-offset-3">
+                            <button 
+                                    class="btn btn-danger"
+                                    type="submit"
+                                    ng-show="produto.id===0"
+                            >
+                                Cadastrar
+                            </button>
+                            
+                            <button
+                                    class="btn btn-success"
+                                    type="submit"
+                                    ng-show="produto.id!==0"
+                                    >
+                                Alterar
+                            </button>
+                            
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+            <!-- /form cadastro -->
+            
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                    
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th width="90"> Código          </th>
+                                    <th>            Descrição       </th>
+                                    <th width="90"> Altura          </th>
+                                    <th width="90"> Largura         </th>
+                                    <th width="90"> Profundidade    </th>
+                                    <th width="140"> -               </th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                
+                                <tr ng-repeat="produto in allProdutos">
+                                    <td>{{ produto.cdProduto        }}</td>
+                                    <td>{{ produto.dsProduto        }}</td>
+                                    <td>{{ produto.vlAltura         }}</td>
+                                    <td>{{ produto.vlLargura        }}</td>
+                                    <td>{{ produto.vlProfundidade   }}</td>
+                                    <!--<td>{{ item.tpAtivo }}</td>-->
+                                    <td>
+                                        <button 
+                                                type="button"
+                                                class="btn btn-default btn-sm"
+                                                ng-click="open(produto)"
+                                        >
+                                            <span class="glyphicon glyphicon-comment"></span>
+                                        </button>
+                                        <button 
+                                                type="button"
+                                                class="btn btn-default btn-sm"
+                                                ng-click="getProduto(produto.id)"
+                                        >
+                                            <span class="glyphicon glyphicon-edit"></span>
+                                        </button>
+                                        <button 
+                                                type="button"
+                                                class="btn btn-danger btn-sm"
+                                                ng-click="removeProduto(produto.id)"
+                                        >
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                            
+                        </table>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <script type="text/ng-template" id="comentario.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Cadastro Comentário</h3>
+                </div>
+                <div class="modal-body">
+                
+                <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th> Comentários </th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                
+                                <tr ng-repeat="comentario in allComentarios">
+                                    <td>{{ comentario.dsComentario}}</td>
+                                </tr>
+                                
+                            </tbody>
+                </table>
+                    <form ng-submit="processaFormComentario(comentario)">
+                    
+                            <div class="row mbottom">
+                                <div class="col-xs-3 text-right">
+                                    Comentário:
+                                </div>
+                                <div class="col-xs-9">
+                                    <div class="input-group">
+                                        <textarea
+                                                rows="4" cols="50"
+                                                class="form-control" 
+                                                ng-model="comentario.dsComentario" 
+                                                required>
+                                        </textarea>
+                                    
+                                        <span class="input-group-btn">
+                                            <button 
+                                                    type="submit"
+                                                    style="height: 110px;"
+                                                    class="btn btn-success"
+                                            >
+                                                Cadastrar
+                                            </button>
+                                        </sapn>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                            
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" type="button" ng-click="ok()">Fechar</button>
+                </div>
+            </script>
+            
+        </div>
+        
+        <script src="JavaScript/lib/jquery/jquery-3.1.1.min.js"></script>
+        <script src="JavaScript/lib/jquery/jquery.gritter.min.js"></script>
+        
+        
+        <script src="JavaScript/lib/angular.min.js"></script>
+        <script src="JavaScript/lib/angular-resource.min.js"></script>
+        <script src="JavaScript/services.js"></script>
+        <script src="JavaScript/objetos.js"></script>
+        
+        <script src="JavaScript/lib/angular-animate.js"></script>
+        <script src="JavaScript/lib/ui-bootstrap-tpls-2.0.2.js"></script>
+        
+        <script src="JavaScript/lib/ui-utils.min.js"></script>
+        <script src="JavaScript/lib/loading-bar.min.js"></script>
+        <script src="JavaScript/cadastroProdutoController.js"></script>
+        
+    </body>
+</html>
